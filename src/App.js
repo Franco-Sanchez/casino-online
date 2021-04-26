@@ -1,7 +1,12 @@
+import SlotMachine from "./core/SlotMachine";
+import Layout from "./layout/Layout";
+
 function App() {
   return (
-    <div className="App"></div>
-  );
+    <Layout>
+      <SlotMachine />
+    </Layout>
+  )
 }
 
 export default App;
