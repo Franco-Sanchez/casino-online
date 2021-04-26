@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+# Steps
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+•	One page app. No routing
 
-## Available Scripts
+•	Page consists of three parts header, content and footer
 
-In the project directory, you can run:
+•	Header consists of company logo/name on the left and balance+avatar on the right
 
-### `yarn start`
+•	There is nothing special about logo
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+•	Balance displays real balance in format $99.99 and is updated after each game. It is persistent i.e. keeps data in local storage
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+•	Login button or avatar, depending on state, offers user to login (enter his name) or log out. User is persistent too
 
-### `yarn test`
+•	You can start playing as a guest but should be able to log in at any time
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+•	Content part has table in it with game results. Columns are id, slot 1-3, time. Id and time are sortable both ways
 
-### `yarn build`
+•	Footer is sticky (when table is long) and has copyright
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+•	In the content part there is a button which starts a game aka opens popup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+•	Popup has 3 slots in content part and 3 button underneath
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+•	When user press first button - random numbers 1-9 are displayed in slots
 
-### `yarn eject`
+•	Each spin costs $1 from balance
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+•	Three different numbers 123 do nothing
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+•	Each pair 112 122 adds $0.5 to balance
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+•	Each three in a row adds $5 to balance
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+•	777 adds $10 to balance
 
-## Learn More
+•	The second button is meant for debug. it fakes 777 spin
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+•	After each spin results are added to the table.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+•	Third button closes popup
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
