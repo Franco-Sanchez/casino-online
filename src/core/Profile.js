@@ -2,6 +2,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import FaceIcon from "@material-ui/icons/Face";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useDispatch } from "react-redux";
+import { logout } from "../features/session/sessionSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,18 +17,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Profile() {
+  const dispatch = useDispatch();
   const classes = useStyles();
 
-  const handleDelete = () => {
-    console.log('Cerrar sesión')
-  };
+  const handleLogout = () => dispatch(logout());
 
   return (
     <div className={classes.root}>
       <Chip
         icon={<FaceIcon />}
         label="Franco"
-        onDelete={handleDelete}
+        onDelete={handleLogout}
         color="secondary"
         deleteIcon={<ExitToAppIcon/>}
       />

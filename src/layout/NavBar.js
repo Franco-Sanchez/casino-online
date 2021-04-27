@@ -1,10 +1,11 @@
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { Box } from '@material-ui/core';
-import Login from '../core/Login';
-import Profile from '../core/Profile';
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { Box } from "@material-ui/core";
+import Login from "../core/Login";
+import { useSelector } from "react-redux";
+import Profile from "../core/Profile";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NavBar = () => {
+  const user = useSelector((state) => state.session.user);
+  const amount = useSelector(state => state.game.amount);
   const classes = useStyles();
 
   return (
@@ -28,14 +31,12 @@ const NavBar = () => {
           <Typography variant="h6" className={classes.title}>
             Casino
           </Typography>
-          <Box mr={1}>${(99).toFixed(2)}</Box>
-          {/* Crear condicional para mostrar el nombre del usuario */}
-          <Login />
-          {/* <Profile /> */}
+          <Box mr={1}>$ {(amount).toFixed(2)}</Box>
+          {user ? <Profile /> : <Login />}
         </Toolbar>
       </AppBar>
     </div>
   );
-}
+};
 
 export default NavBar;

@@ -11,7 +11,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.palette.primary.main,
-    color: 'white'
+    color: 'white',
+    fontFamily: 'Roboto'
   }
 }))
 

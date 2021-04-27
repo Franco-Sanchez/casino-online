@@ -6,10 +6,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../features/session/sessionSlice";
 
 function Login() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,7 +27,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if(name === '') return;
-    console.log(name);
+    dispatch(login({ name }))
     handleClose();
     setName('');
   }
