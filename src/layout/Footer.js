@@ -19,7 +19,7 @@ const Footer = () => {
 
   return (
     <footer className={classes.footer}>
-      <h6>Copyright - Derechos reservados</h6>
+      <h6>Copyright - All rights reserved</h6>
     </footer>
   )
 }

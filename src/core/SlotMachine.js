@@ -37,6 +37,7 @@ export default function SlotMachine() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const amount = useSelector((state) => state.game.amount);
+  const records = useSelector((state) => state.game.records);
   const dispatch = useDispatch();
 
   const handleClickOpen = () => setOpen(true);
@@ -65,7 +66,9 @@ export default function SlotMachine() {
   };
 
   const handleCreateGame = () => {
+    const id = records.length > 0 ? records[records.length - 1]['id'] + 1 : 1;
     const objGame = {
+      id,
       firstNumber: getRandomNumber(),
       secondNumber: getRandomNumber(),
       thirdNumber: getRandomNumber(),

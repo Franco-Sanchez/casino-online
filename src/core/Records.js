@@ -78,7 +78,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align='center'
+            align={headCell.id == 'id' ? 'left' : 'center'}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -290,8 +290,8 @@ export default function Records() {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {record.name}
+                      <TableCell component="th" id={labelId} scope="row" padding="none" align="left">
+                        {record.id}
                       </TableCell>
                       <TableCell align="center">{record.firstNumber}</TableCell>
                       <TableCell align="center">{record.secondNumber}</TableCell>
