@@ -17,6 +17,7 @@ import {
   threeEqualNumbers,
   twoEqualNumbers,
 } from "../features/game/gameSlice";
+import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -46,6 +47,7 @@ export default function SlotMachine() {
     setOpen(false);
     dispatch(cleanGame());
   };
+
   const getRandomNumber = () => Math.floor(Math.random() * 9 + 1);
 
   const awards = (game) => {
@@ -56,13 +58,26 @@ export default function SlotMachine() {
 
     const arrKeys = Object.keys(quantityNumbers);
     
-    if (arrKeys.length == 2) {
+    if (arrKeys.length === 2) {
       dispatch(twoEqualNumbers());
-    } else if (arrKeys.length == 1 && arrKeys[0] == "7") {
+    } else if (arrKeys.length === 1 && arrKeys[0] === "7") {
       dispatch(hit());
-    } else if (arrKeys.length == 1) {
+    } else if (arrKeys.length === 1) {
       dispatch(threeEqualNumbers());
     }
+  };
+
+  const transformDate = () => {
+    const date = new Date(Date.now());
+    const newFormat = new Date(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds()
+    );
+    return format(newFormat, "HH:mm:ss");
   };
 
   const handleCreateGame = () => {
@@ -72,6 +87,7 @@ export default function SlotMachine() {
       firstNumber: getRandomNumber(),
       secondNumber: getRandomNumber(),
       thirdNumber: getRandomNumber(),
+      date: transformDate()
     };
     dispatch(createGame(objGame));
     awards(objGame);
