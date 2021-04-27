@@ -1,25 +1,31 @@
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
-import { forwardRef, useState } from 'react';
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
+import Slide from "@material-ui/core/Slide";
+import { forwardRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Game from "./Game";
+import {
+  createGame,
+  cleanGame,
+  hit,
+  threeEqualNumbers,
+  twoEqualNumbers,
+} from "../features/game/gameSlice";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    position: 'relative',
+    position: "relative",
   },
   title: {
-    marginLeft: theme.spacing(2),
     flex: 1,
+    textAlign: "center",
+    fontSize: 32,
   },
 }));
 
@@ -30,13 +36,42 @@ const Transition = forwardRef(function Transition(props, ref) {
 export default function SlotMachine() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const amount = useSelector((state) => state.game.amount);
+  const dispatch = useDispatch();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const handleClickOpen = () => setOpen(true);
 
   const handleClose = () => {
     setOpen(false);
+    dispatch(cleanGame());
+  };
+  const getRandomNumber = () => Math.floor(Math.random() * 9 + 1);
+
+  const awards = (game) => {
+    const quantityNumbers = Object.values(game).reduce((acc, curr) => {
+      acc[curr] ? acc[curr]++ : (acc[curr] = 1);
+      return acc;
+    }, {});
+
+    const arrKeys = Object.keys(quantityNumbers);
+    
+    if (arrKeys.length == 2) {
+      dispatch(twoEqualNumbers());
+    } else if (arrKeys.length == 1 && arrKeys[0] == "7") {
+      dispatch(hit());
+    } else if (arrKeys.length == 1) {
+      dispatch(threeEqualNumbers());
+    }
+  };
+
+  const handleCreateGame = () => {
+    const objGame = {
+      firstNumber: getRandomNumber(),
+      secondNumber: getRandomNumber(),
+      thirdNumber: getRandomNumber(),
+    };
+    dispatch(createGame(objGame));
+    awards(objGame);
   };
 
   return (
@@ -44,29 +79,36 @@ export default function SlotMachine() {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Start
       </Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
         <AppBar className={classes.appBar}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
               <CloseIcon />
             </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Sound
+            <Typography variant="body1" className={classes.title}>
+              $ {amount.toFixed(2)}
             </Typography>
-            <Button autoFocus color="inherit">
-              save
+            <Button
+              autoFocus
+              color="secondary"
+              variant="contained"
+              onClick={handleCreateGame}
+            >
+              Play!
             </Button>
           </Toolbar>
         </AppBar>
-        <List>
-          <ListItem button>
-            <ListItemText primary="Phone ringtone" secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText primary="Default notification ringtone" secondary="Tethys" />
-          </ListItem>
-        </List>
+        <Game />
       </Dialog>
     </div>
   );

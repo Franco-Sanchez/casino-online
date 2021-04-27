@@ -2,17 +2,15 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   footer: {
-    position: "fixed",
-    bottom: 0,
     width: '100%',
-    padding: '0 35px',
     height: 40,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.palette.primary.main,
     color: 'white',
-    fontFamily: 'Roboto'
+    fontFamily: 'Roboto',
+    fontSize: 18
   }
 }))
 

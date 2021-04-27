@@ -22,26 +22,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { Button } from '@material-ui/core';
 import SlotMachine from './SlotMachine';
-
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-//   createData('Donut', 452, 25.0, 51, 4.9),
-//   createData('Eclair', 262, 16.0, 24, 6.0),
-//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//   createData('Gingerbread', 356, 16.0, 49, 3.9),
-//   createData('Honeycomb', 408, 3.2, 87, 6.5),
-//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//   createData('Jelly Bean', 375, 0.0, 94, 0.0),
-//   createData('KitKat', 518, 26.0, 65, 7.0),
-//   createData('Lollipop', 392, 0.2, 98, 0.0),
-//   createData('Marshmallow', 318, 0, 81, 2.0),
-//   createData('Nougat', 360, 19.0, 9, 37.0),
-//   createData('Oreo', 437, 18.0, 63, 4.0),
-// ];
+import { useSelector } from 'react-redux';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -70,11 +51,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'id', numeric: false, disablePadding: true, label: 'ID' },
-  { id: 'first_number', numeric: true, disablePadding: false, label: 'First number' },
-  { id: 'second_number', numeric: true, disablePadding: false, label: 'Second number' },
-  { id: 'third_number', numeric: true, disablePadding: false, label: 'Third number' },
-  { id: 'time', numeric: true, disablePadding: false, label: 'Time' },
+  { id: 'id', disablePadding: true, label: 'ID' },
+  { id: 'first_number', disablePadding: false, label: 'First number' },
+  { id: 'second_number', disablePadding: false, label: 'Second number' },
+  { id: 'third_number', disablePadding: false, label: 'Third number' },
+  { id: 'time', disablePadding: false, label: 'Time' },
 ];
 
 function EnhancedTableHead(props) {
@@ -97,7 +78,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align='center'
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -122,8 +103,7 @@ function EnhancedTableHead(props) {
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+    //
   },
   highlight:
     theme.palette.type === 'light'
@@ -176,6 +156,10 @@ const EnhancedTableToolbar = (props) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+    padding: 20
   },
   paper: {
     width: '100%',
@@ -195,6 +179,10 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  container: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+  }
 }));
 
 export default function Records() {
@@ -205,6 +193,7 @@ export default function Records() {
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const records = useSelector(state => state.game.records);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -256,13 +245,13 @@ export default function Records() {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, [].length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, records.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
+        <TableContainer className={classes.container}>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
@@ -276,23 +265,23 @@ export default function Records() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={[].length}
+              rowCount={records.length}
             />
             <TableBody>
-              {stableSort([], getComparator(order, orderBy))
+              {stableSort(records, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                .map((record, index) => {
+                  const isItemSelected = isSelected(record.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, record.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={record.name}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -302,12 +291,12 @@ export default function Records() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                        {record.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="center">{record.firstNumber}</TableCell>
+                      <TableCell align="center">{record.secondNumber}</TableCell>
+                      <TableCell align="center">{record.thirdNumber}</TableCell>
+                      <TableCell align="center">{record.protein}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -322,7 +311,7 @@ export default function Records() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={[].length}
+          count={records.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

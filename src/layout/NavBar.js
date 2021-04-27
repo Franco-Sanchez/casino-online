@@ -17,6 +17,12 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  box: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 15
+  }
+
 }));
 
 const NavBar = () => {
@@ -31,8 +37,12 @@ const NavBar = () => {
           <Typography variant="h6" className={classes.title}>
             Casino
           </Typography>
-          <Box mr={1}>$ {(amount).toFixed(2)}</Box>
-          {user ? <Profile /> : <Login />}
+          <Box className={classes.box}>
+            <Typography variant="body1">
+              $ {amount.toFixed(2)}
+            </Typography>
+            {user ? <Profile /> : <Login />}
+          </Box>
         </Toolbar>
       </AppBar>
     </div>
