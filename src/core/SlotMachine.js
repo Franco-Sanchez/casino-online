@@ -13,6 +13,7 @@ import Game from "./Game";
 import {
   createGame,
   cleanGame,
+  nothing,
   hit,
   threeEqualNumbers,
   twoEqualNumbers,
@@ -28,6 +29,13 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     fontSize: 32,
   },
+  result: {
+    textAlign: 'center',
+    fontSize: 60,
+    marginTop: 20,
+    marginBottom: 20,
+    fontWeight: 'bold'
+  }
 }));
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -38,6 +46,7 @@ export default function SlotMachine() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const amount = useSelector((state) => state.game.amount);
+  const result = useSelector(state => state.game.result);
   const records = useSelector((state) => state.game.records);
   const dispatch = useDispatch();
 
@@ -51,19 +60,21 @@ export default function SlotMachine() {
   const getRandomNumber = () => Math.floor(Math.random() * 9 + 1);
 
   const awards = (game) => {
-    const quantityNumbers = Object.values(game).reduce((acc, curr) => {
+    const quantityNumbers = Object.values(game).slice(1, 4).reduce((acc, curr) => {
       acc[curr] ? acc[curr]++ : (acc[curr] = 1);
       return acc;
     }, {});
 
     const arrKeys = Object.keys(quantityNumbers);
-    
+
     if (arrKeys.length === 2) {
       dispatch(twoEqualNumbers());
     } else if (arrKeys.length === 1 && arrKeys[0] === "7") {
       dispatch(hit());
     } else if (arrKeys.length === 1) {
       dispatch(threeEqualNumbers());
+    } else {
+      dispatch(nothing());
     }
   };
 
@@ -127,6 +138,9 @@ export default function SlotMachine() {
             </Button>
           </Toolbar>
         </AppBar>
+        <Typography variant="body1" className={classes.result} color="primary">
+          {result}
+        </Typography>
         <Game />
       </Dialog>
     </div>
